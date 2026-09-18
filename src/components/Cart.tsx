@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
+import { useCoupon } from '../context/CouponContext';
 
 interface CartProps {
   isOpen: boolean;
@@ -9,8 +10,39 @@ interface CartProps {
 
 const Cart: React.FC<CartProps> = ({ isOpen, onClose, onCheckout }) => {
   const { cart, removeFromCart, updateQuantity, totalPrice, totalItems } = useCart();
+  const { appliedCoupon, applyCoupon, removeCoupon, discountAmount, setDiscountBase } = useCoupon();
+  const [couponCode, setCouponCode] = useState('');
+  const [couponError, setCouponError] = useState('');
+  const [couponSuccess, setCouponSuccess] = useState('');
+
+  useEffect(() => {
+    setDiscountBase(totalPrice);
+  }, [totalPrice, setDiscountBase]);
 
   if (!isOpen) return null;
+
+  const handleApplyCoupon = () => {
+    setCouponError('');
+    setCouponSuccess('');
+    if (!couponCode.trim()) {
+      setCouponError('Lütfen bir kupon kodu girin.');
+      return;
+    }
+    const success = applyCoupon(couponCode);
+    if (success) {
+      setCouponSuccess('Kupon başarıyla uygulandı!');
+      setCouponCode('');
+    } else {
+      setCouponError('Geçersiz kupon kodu.');
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    removeCoupon();
+    setCouponSuccess('');
+  };
+
+  const finalTotal = totalPrice - discountAmount;
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
@@ -120,19 +152,73 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, onCheckout }) => {
         {/* Footer */}
         {cart.length > 0 && (
           <div className="border-t border-[#E8D5B0] p-5 space-y-4">
+            {/* Coupon Section */}
+            <div className="bg-[#FDF8F3] rounded-xl p-3">
+              {appliedCoupon ? (
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-semibold text-green-700">✓ {appliedCoupon.description}</p>
+                    <p className="text-xs text-[#8B5E3C]">-₺{discountAmount} indirim</p>
+                  </div>
+                  <button
+                    onClick={handleRemoveCoupon}
+                    className="text-xs text-red-500 hover:text-red-700 font-medium cursor-pointer"
+                  >
+                    Kaldır
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={couponCode}
+                      onChange={(e) => {
+                        setCouponCode(e.target.value.toUpperCase());
+                        setCouponError('');
+                      }}
+                      placeholder="Kupon kodu"
+                      className="flex-1 px-3 py-2 rounded-lg border border-[#E8D5B0] bg-white text-sm text-[#2C1810] focus:outline-none focus:ring-2 focus:ring-[#C8A96E]"
+                    />
+                    <button
+                      onClick={handleApplyCoupon}
+                      className="px-4 py-2 bg-[#5C3D2E] text-white rounded-lg text-sm font-medium hover:bg-[#2C1810] transition-colors cursor-pointer"
+                    >
+                      Uygula
+                    </button>
+                  </div>
+                  {couponError && (
+                    <p className="text-xs text-red-500">{couponError}</p>
+                  )}
+                  {couponSuccess && (
+                    <p className="text-xs text-green-600">{couponSuccess}</p>
+                  )}
+                  <p className="text-xs text-[#8B5E3C]">
+                    Test kodları: HOŞGELDİN10, KAHVE20, İLK50
+                  </p>
+                </div>
+              )}
+            </div>
+
             {/* Summary */}
             <div className="space-y-2">
               <div className="flex justify-between text-sm text-[#8B5E3C]">
                 <span>Ara Toplam</span>
                 <span>₺{totalPrice}</span>
               </div>
+              {discountAmount > 0 && (
+                <div className="flex justify-between text-sm text-green-600">
+                  <span>İndirim</span>
+                  <span>-₺{discountAmount}</span>
+                </div>
+              )}
               <div className="flex justify-between text-sm text-[#8B5E3C]">
                 <span>Kargo</span>
                 <span className="text-green-600 font-medium">Ücretsiz</span>
               </div>
               <div className="flex justify-between text-lg font-bold text-[#2C1810] pt-2 border-t border-[#E8D5B0]">
                 <span>Toplam</span>
-                <span>₺{totalPrice}</span>
+                <span>₺{finalTotal}</span>
               </div>
             </div>
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Product } from '../data/products';
 import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
 
 interface ProductDetailProps {
   product: Product;
@@ -9,10 +10,20 @@ interface ProductDetailProps {
 
 const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose }) => {
   const { addToCart } = useCart();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const isFavorite = isInWishlist(product.id);
 
   const handleAddToCart = () => {
     addToCart(product);
     onClose();
+  };
+
+  const handleWishlistClick = () => {
+    if (isFavorite) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product);
+    }
   };
 
   return (
@@ -115,13 +126,37 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose }) => {
             </div>
           </div>
 
-          {/* Add to Cart Button */}
-          <button
-            onClick={handleAddToCart}
-            className="w-full bg-[#5C3D2E] hover:bg-[#2C1810] text-white py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:shadow-xl cursor-pointer active:scale-[0.98]"
-          >
-            Sepete Ekle — ₺{product.price}
-          </button>
+          {/* Action Buttons */}
+          <div className="flex gap-3">
+            <button
+              onClick={handleAddToCart}
+              className="flex-1 bg-[#5C3D2E] hover:bg-[#2C1810] text-white py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:shadow-xl cursor-pointer active:scale-[0.98]"
+            >
+              Sepete Ekle — ₺{product.price}
+            </button>
+            <button
+              onClick={handleWishlistClick}
+              className={`px-5 py-4 rounded-xl border-2 transition-all duration-300 cursor-pointer ${
+                isFavorite
+                  ? 'border-red-500 bg-red-50 text-red-500'
+                  : 'border-[#E8D5B0] text-[#5C3D2E] hover:border-[#5C3D2E]'
+              }`}
+            >
+              <svg
+                className="w-6 h-6"
+                fill={isFavorite ? 'currentColor' : 'none'}
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Product } from '../data/products';
+import { useWishlist } from '../context/WishlistContext';
 
 interface ProductCardProps {
   product: Product;
@@ -8,6 +9,18 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, onViewDetails, onAddToCart }) => {
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const isFavorite = isInWishlist(product.id);
+
+  const handleWishlistClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isFavorite) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product);
+    }
+  };
+
   return (
     <div className="product-card bg-white rounded-2xl overflow-hidden border border-[#E8D5B0]/50 animate-fade-in">
       {/* Image Area */}
@@ -26,7 +39,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onViewDetails, onAdd
             {product.category}
           </span>
         </div>
-        <div className="absolute top-3 right-3">
+        <div className="absolute top-3 right-3 flex gap-2">
+          <button
+            onClick={handleWishlistClick}
+            className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer ${
+              isFavorite
+                ? 'bg-red-500 text-white'
+                : 'bg-white/90 backdrop-blur-sm text-[#5C3D2E] hover:bg-white'
+            }`}
+          >
+            <svg className="w-4 h-4" fill={isFavorite ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+          </button>
           <span className="bg-[#C8A96E] text-white text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
             ★ {product.rating}
           </span>

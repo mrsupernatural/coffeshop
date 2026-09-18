@@ -1,5 +1,7 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { CartProvider, useCart } from './context/CartContext';
+import { WishlistProvider } from './context/WishlistContext';
+import { CouponProvider } from './context/CouponContext';
 import { products, categories, Product } from './data/products';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -8,14 +10,18 @@ import ProductDetail from './components/ProductDetail';
 import Cart from './components/Cart';
 import Checkout from './components/Checkout';
 import Testimonials from './components/Testimonials';
+import BrewingGuide from './components/BrewingGuide';
 import Newsletter from './components/Newsletter';
+import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 import Toast from './components/Toast';
 import ScrollToTop from './components/ScrollToTop';
+import SortFilter, { SortOption } from './components/SortFilter';
 
 const AppContent: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Tümü');
+  const [sortBy, setSortBy] = useState<SortOption>('default');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
@@ -23,8 +29,8 @@ const AppContent: React.FC = () => {
   const [isToastVisible, setIsToastVisible] = useState(false);
   const { addToCart } = useCart();
 
-  const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
+  const filteredAndSortedProducts = useMemo(() => {
+    let result = products.filter((product) => {
       const matchesSearch =
         product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -36,7 +42,27 @@ const AppContent: React.FC = () => {
 
       return matchesSearch && matchesCategory;
     });
-  }, [searchQuery, selectedCategory]);
+
+    // Sort
+    switch (sortBy) {
+      case 'price-asc':
+        result = [...result].sort((a, b) => a.price - b.price);
+        break;
+      case 'price-desc':
+        result = [...result].sort((a, b) => b.price - a.price);
+        break;
+      case 'rating':
+        result = [...result].sort((a, b) => b.rating - a.rating);
+        break;
+      case 'name':
+        result = [...result].sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      default:
+        break;
+    }
+
+    return result;
+  }, [searchQuery, selectedCategory, sortBy]);
 
   const showToast = useCallback((message: string) => {
     setToastMessage(message);
@@ -78,7 +104,7 @@ const AppContent: React.FC = () => {
         </div>
 
         {/* Search & Filter */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-8 sm:mb-10">
+        <div className="flex flex-col sm:flex-row gap-4 mb-6">
           {/* Search */}
           <div className="relative flex-1">
             <svg
@@ -131,22 +157,17 @@ const AppContent: React.FC = () => {
           </div>
         </div>
 
-        {/* Results Count */}
-        <div className="flex items-center justify-between mb-6">
-          <p className="text-sm text-[#8B5E3C]">
-            {filteredProducts.length} ürün bulundu
-            {searchQuery && (
-              <span className="ml-1">
-                — "<span className="font-medium text-[#5C3D2E]">{searchQuery}</span>"
-              </span>
-            )}
-          </p>
-        </div>
+        {/* Sort Filter */}
+        <SortFilter
+          sortBy={sortBy}
+          onSortChange={setSortBy}
+          productCount={filteredAndSortedProducts.length}
+        />
 
         {/* Product Grid */}
-        {filteredProducts.length > 0 ? (
+        {filteredAndSortedProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {filteredProducts.map((product) => (
+            {filteredAndSortedProducts.map((product) => (
               <ProductCard
                 key={product.id}
                 product={product}
@@ -213,11 +234,21 @@ const AppContent: React.FC = () => {
         </div>
       </section>
 
+      {/* Brewing Guide */}
+      <div id="brewing">
+        <BrewingGuide />
+      </div>
+
       {/* Testimonials */}
       <Testimonials />
 
       {/* Newsletter */}
       <Newsletter />
+
+      {/* FAQ */}
+      <div id="faq">
+        <FAQ />
+      </div>
 
       <Footer />
 
@@ -255,9 +286,13 @@ const AppContent: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <CartProvider>
-      <AppContent />
-    </CartProvider>
+    <CouponProvider>
+      <WishlistProvider>
+        <CartProvider>
+          <AppContent />
+        </CartProvider>
+      </WishlistProvider>
+    </CouponProvider>
   );
 };
 

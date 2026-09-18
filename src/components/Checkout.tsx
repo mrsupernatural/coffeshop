@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
+import { useCoupon } from '../context/CouponContext';
 
 interface CheckoutProps {
   isOpen: boolean;
@@ -10,6 +11,8 @@ type CheckoutStep = 'info' | 'payment' | 'success';
 
 const Checkout: React.FC<CheckoutProps> = ({ isOpen, onClose }) => {
   const { cart, totalPrice, clearCart } = useCart();
+  const { appliedCoupon, discountAmount } = useCoupon();
+  const finalTotal = totalPrice - discountAmount;
   const [step, setStep] = useState<CheckoutStep>('info');
   const [formData, setFormData] = useState({
     name: '',
@@ -202,9 +205,15 @@ const Checkout: React.FC<CheckoutProps> = ({ isOpen, onClose }) => {
                     <span className="font-medium">₺{item.product.price * item.quantity}</span>
                   </div>
                 ))}
+                {discountAmount > 0 && (
+                  <div className="flex justify-between text-sm text-green-600 py-1">
+                    <span>{appliedCoupon?.description}</span>
+                    <span>-₺{discountAmount}</span>
+                  </div>
+                )}
                 <div className="border-t border-[#E8D5B0] mt-2 pt-2 flex justify-between font-bold text-[#2C1810]">
                   <span>Toplam</span>
-                  <span>₺{totalPrice}</span>
+                  <span>₺{finalTotal}</span>
                 </div>
               </div>
 
@@ -273,7 +282,7 @@ const Checkout: React.FC<CheckoutProps> = ({ isOpen, onClose }) => {
                       İşleniyor...
                     </>
                   ) : (
-                    `₺${totalPrice} Öde`
+                    `₺${finalTotal} Öde`
                   )}
                 </button>
               </div>
