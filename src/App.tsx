@@ -2,6 +2,7 @@ import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { CartProvider, useCart } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
 import { CouponProvider } from './context/CouponContext';
+import { RecentlyViewedProvider, useRecentlyViewed } from './context/RecentlyViewedContext';
 import { products, categories, Product } from './data/products';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -18,6 +19,7 @@ import Toast from './components/Toast';
 import ScrollToTop from './components/ScrollToTop';
 import SortFilter, { SortOption } from './components/SortFilter';
 import CookieBanner from './components/CookieBanner';
+import RecentlyViewed from './components/RecentlyViewed';
 
 const AppContent: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -263,6 +265,14 @@ const AppContent: React.FC = () => {
         <FAQ />
       </div>
 
+      {/* Recently Viewed */}
+      <RecentlyViewed
+        onProductClick={(productId) => {
+          const product = products.find((p) => p.id === productId);
+          if (product) setSelectedProduct(product);
+        }}
+      />
+
       <Footer />
 
       {/* Modals & Overlays */}
@@ -303,11 +313,13 @@ const AppContent: React.FC = () => {
 const App: React.FC = () => {
   return (
     <CouponProvider>
-      <WishlistProvider>
-        <CartProvider>
-          <AppContent />
-        </CartProvider>
-      </WishlistProvider>
+      <RecentlyViewedProvider>
+        <WishlistProvider>
+          <CartProvider>
+            <AppContent />
+          </CartProvider>
+        </WishlistProvider>
+      </RecentlyViewedProvider>
     </CouponProvider>
   );
 };

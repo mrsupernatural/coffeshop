@@ -11,6 +11,7 @@ export interface Product {
   image: string;
   rating: number;
   reviews: number;
+  stock: number;
 }
 
 export interface CartItem {
@@ -40,6 +41,7 @@ export const products: Product[] = [
     image: 'https://image.qwenlm.ai/generated-images/a44aa9be-8c40-463c-a741-3e6ac90af5a2/_result.png',
     rating: 4.8,
     reviews: 124,
+    stock: 15,
   },
   {
     id: 2,
@@ -54,6 +56,7 @@ export const products: Product[] = [
     image: 'https://image.qwenlm.ai/generated-images/130b9960-cba3-4721-8219-c6a677cea5eb/_result.png',
     rating: 4.6,
     reviews: 98,
+    stock: 23,
   },
   {
     id: 3,
@@ -68,6 +71,7 @@ export const products: Product[] = [
     image: 'https://image.qwenlm.ai/generated-images/533222da-8c97-4dfd-b840-6af2946fd3df/_result.png',
     rating: 4.7,
     reviews: 156,
+    stock: 42,
   },
   {
     id: 4,
@@ -82,6 +86,7 @@ export const products: Product[] = [
     image: 'https://image.qwenlm.ai/generated-images/99d5aab7-fb0b-4f84-bd49-0d665af6f219/_result.png',
     rating: 4.9,
     reviews: 203,
+    stock: 8,
   },
   {
     id: 5,
@@ -96,6 +101,7 @@ export const products: Product[] = [
     image: 'https://image.qwenlm.ai/generated-images/fe21cbc3-4d73-44ed-ac51-62b2f6d01340/_result.png',
     rating: 4.5,
     reviews: 87,
+    stock: 31,
   },
   {
     id: 6,
@@ -110,5 +116,6 @@ export const products: Product[] = [
     image: 'https://image.qwenlm.ai/generated-images/178177db-85c1-4bb4-b0d2-7a489dd39c59/_result.png',
     rating: 4.8,
     reviews: 142,
+    stock: 3,
   },
 ];

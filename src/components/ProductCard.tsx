@@ -66,9 +66,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onViewDetails, onAdd
         >
           {product.name}
         </h3>
-        <p className="text-sm text-[#8B5E3C] mb-2">
+        <p className="text-sm text-[#8B5E3C] mb-1">
           {product.origin} • {product.roast}
         </p>
+        {product.stock <= 5 && product.stock > 0 && (
+          <p className="text-xs text-orange-600 font-medium mb-1">
+            ⚡ Son {product.stock} adet!
+          </p>
+        )}
+        {product.stock === 0 && (
+          <p className="text-xs text-red-600 font-medium mb-1">
+            Stokta Yok
+          </p>
+        )}
         <div className="flex flex-wrap gap-1 mb-3">
           {product.flavor.map((f) => (
             <span

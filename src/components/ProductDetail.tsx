@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Product, products } from '../data/products';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
+import { useRecentlyViewed } from '../context/RecentlyViewedContext';
+import StockIndicator from './StockIndicator';
+import ShareButtons from './ShareButtons';
 
 interface ProductDetailProps {
   product: Product;
@@ -11,13 +14,20 @@ interface ProductDetailProps {
 const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose }) => {
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const { addToRecentlyViewed } = useRecentlyViewed();
   const isFavorite = isInWishlist(product.id);
   const [quantity, setQuantity] = useState(1);
+  const [isGift, setIsGift] = useState(false);
 
   // Get related products (same category, exclude current)
   const relatedProducts = products
     .filter((p) => p.category === product.category && p.id !== product.id)
     .slice(0, 3);
+
+  // Add to recently viewed when product opens
+  useEffect(() => {
+    addToRecentlyViewed(product);
+  }, [product, addToRecentlyViewed]);
 
   const handleAddToCart = () => {
     for (let i = 0; i < quantity; i++) {
@@ -66,7 +76,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose }) => {
 
         {/* Content */}
         <div className="p-6 sm:p-8">
-          <div className="flex items-start justify-between mb-4">
+          <div className="flex items-start justify-between mb-3">
             <div>
               <span className="text-sm text-[#C8A96E] font-medium uppercase tracking-wider">
                 {product.category}
@@ -81,6 +91,11 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose }) => {
               </span>
               <p className="text-sm text-[#8B5E3C]">/ {product.weight}</p>
             </div>
+          </div>
+
+          {/* Stock Indicator */}
+          <div className="mb-3">
+            <StockIndicator stock={product.stock} />
           </div>
 
           {/* Rating */}
@@ -135,6 +150,22 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose }) => {
             </div>
           </div>
 
+          {/* Gift Option */}
+          <div className="mb-6 bg-[#FDF8F3] rounded-xl p-4 border border-[#E8D5B0]/50">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={isGift}
+                onChange={(e) => setIsGift(e.target.checked)}
+                className="w-5 h-5 rounded border-[#E8D5B0] text-[#5C3D2E] focus:ring-[#C8A96E]"
+              />
+              <div>
+                <p className="font-medium text-[#2C1810]">🎁 Hediye Paketi</p>
+                <p className="text-xs text-[#8B5E3C]">Özel hediye ambalajı ile gönderilsin</p>
+              </div>
+            </label>
+          </div>
+
           {/* Quantity Selector */}
           <div className="mb-6">
             <h4 className="text-sm font-medium text-[#8B5E3C] uppercase tracking-wider mb-2">
@@ -152,7 +183,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose }) => {
                 {quantity}
               </span>
               <button
-                onClick={() => setQuantity(quantity + 1)}
+                onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
                 className="w-10 h-10 rounded-xl border border-[#E8D5B0] flex items-center justify-center text-[#5C3D2E] hover:bg-[#F5E6D3] transition-colors cursor-pointer font-bold"
                 aria-label="Artır"
               >
@@ -165,12 +196,13 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose }) => {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-3 mb-8">
+          <div className="flex gap-3 mb-6">
             <button
               onClick={handleAddToCart}
-              className="flex-1 bg-[#5C3D2E] hover:bg-[#2C1810] text-white py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:shadow-xl cursor-pointer active:scale-[0.98]"
+              disabled={product.stock === 0}
+              className="flex-1 bg-[#5C3D2E] hover:bg-[#2C1810] text-white py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:shadow-xl cursor-pointer active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Sepete Ekle
+              {product.stock === 0 ? 'Stokta Yok' : 'Sepete Ekle'}
             </button>
             <button
               onClick={handleWishlistClick}
@@ -195,6 +227,11 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose }) => {
                 />
               </svg>
             </button>
+          </div>
+
+          {/* Share Buttons */}
+          <div className="border-t border-[#E8D5B0] pt-4 mb-6">
+            <ShareButtons product={product} />
           </div>
 
           {/* Related Products */}
