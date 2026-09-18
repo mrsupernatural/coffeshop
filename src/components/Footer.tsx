@@ -41,29 +41,29 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Template Info */}
           <div>
-            <h4 className="font-semibold text-white mb-4">İletişim</h4>
+            <h4 className="font-semibold text-white mb-4">Template Bilgisi</h4>
             <ul className="space-y-2 text-sm">
               <li className="flex items-center gap-2">
-                <span>📍</span> İstanbul, Türkiye
+                <span>⚠️</span> Bu bir demo projedir
               </li>
               <li className="flex items-center gap-2">
-                <span>📧</span> info@artisancoffee.com
+                <span>📋</span> Gerçek işletme değildir
               </li>
               <li className="flex items-center gap-2">
-                <span>📞</span> +90 212 555 0000
+                <span>🎨</span> Özelleştirilebilir template
               </li>
             </ul>
             {/* Social */}
             <div className="flex gap-3 mt-4">
-              <a href="#" className="w-9 h-9 rounded-full bg-[#5C3D2E] flex items-center justify-center hover:bg-[#C8A96E] transition-colors">
+              <a href="#" className="w-9 h-9 rounded-full bg-[#5C3D2E] flex items-center justify-center hover:bg-[#C8A96E] transition-colors" aria-label="Twitter">
                 <span className="text-sm">𝕏</span>
               </a>
-              <a href="#" className="w-9 h-9 rounded-full bg-[#5C3D2E] flex items-center justify-center hover:bg-[#C8A96E] transition-colors">
+              <a href="#" className="w-9 h-9 rounded-full bg-[#5C3D2E] flex items-center justify-center hover:bg-[#C8A96E] transition-colors" aria-label="Instagram">
                 <span className="text-sm">📷</span>
               </a>
-              <a href="#" className="w-9 h-9 rounded-full bg-[#5C3D2E] flex items-center justify-center hover:bg-[#C8A96E] transition-colors">
+              <a href="#" className="w-9 h-9 rounded-full bg-[#5C3D2E] flex items-center justify-center hover:bg-[#C8A96E] transition-colors" aria-label="Facebook">
                 <span className="text-sm">📘</span>
               </a>
             </div>
@@ -72,7 +72,8 @@ const Footer: React.FC = () => {
 
         {/* Bottom */}
         <div className="border-t border-[#5C3D2E] mt-10 pt-6 text-center text-sm text-[#E8D5B0]/50">
-          <p>© 2026 Artisan Coffee. Tüm hakları saklıdır.</p>
+          <p>© 2026 Artisan Coffee Template. MIT Lisansı altında lisanslanmıştır.</p>
+          <p className="mt-2 text-xs">Bu bir demo/template projesidir. Gerçek bir işletme değildir.</p>
         </div>
       </div>
     </footer>

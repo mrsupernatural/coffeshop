@@ -1,5 +1,7 @@
 # ☕ Artisan Coffee - Premium E-Ticaret Platformu
 
+> ⚠️ **Bu bir template/demo projesidir.** Gerçek bir işletme değildir. Tüm içerikler, görseller ve veriler örnek amaçlıdır.
+
 Dünyanın en seçkin kahve bölgelerinden özenle toplanan premium kahve çekirdekleri için modern, responsive ve tam özellikli bir e-ticaret web uygulaması.
 
 ![React](https://img.shields.io/badge/React-18.3.1-blue?logo=react)
@@ -267,17 +269,6 @@ Katkılarınızı bekliyoruz! Lütfen:
 
 Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakın.
 
-## 👥 Ekip
-
-- **Geliştirici** - Full Stack Developer
-- **Tasarımcı** - UI/UX Designer
-
-## 📞 İletişim
-
-- **Email**: info@artisancoffee.com
-- **Telefon**: +90 212 555 0000
-- **Adres**: İstanbul, Türkiye
-
 ## 🙏 Teşekkürler
 
 - React ekibine
@@ -304,6 +295,20 @@ Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICE
 
 ---
 
+## ⚠️ Yasal Uyarı
+
+**Bu proje bir template/demo uygulamasıdır.** 
+
+- Gerçek bir işletme veya marka değildir
+- Tüm ürünler, fiyatlar ve içerikler örnek amaçlıdır
+- AI ile oluşturulan görseller demo amaçlıdır
+- Simüle edilmiş ödeme süreci gerçek işlem yapmaz
+- İletişim bilgileri ve adresler tamamen kurgusaldır
+
+Bu template'i kendi projeniz için kullanabilir, özelleştirebilir ve geliştirebilirsiniz.
+
+---
+
 **⭐ Bu projeyi beğendiyseniz yıldız vermeyi unutmayın!**
 
-Made with ☕ and ❤️ in Istanbul
+Made with ☕ and ❤️
