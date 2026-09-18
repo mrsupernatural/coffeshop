@@ -2,6 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { useCoupon } from '../context/CouponContext';
 
+// Her ürün için özel gradient renkler
+const getGradient = (id: number) => {
+  const gradients: Record<number, { from: string; to: string }> = {
+    1: { from: '#F5E6D3', to: '#E8D5B0' },
+    2: { from: '#E8D5B0', to: '#D4C4A8' },
+    3: { from: '#FFE4B5', to: '#FFD700' },
+    4: { from: '#4A3728', to: '#2C1810' },
+    5: { from: '#E6E6FA', to: '#D8BFD8' },
+    6: { from: '#2C1810', to: '#1a0f0a' },
+  };
+  return gradients[id] || { from: '#F5E6D3', to: '#E8D5B0' };
+};
+
 interface CartProps {
   isOpen: boolean;
   onClose: () => void;
@@ -92,12 +105,13 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, onCheckout }) => {
                   className="flex gap-4 bg-[#FDF8F3] rounded-xl p-3 animate-fade-in"
                 >
                   {/* Product Image */}
-                  <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
-                    <img
-                      src={item.product.image}
-                      alt={item.product.name}
-                      className="w-full h-full object-cover"
-                    />
+                  <div
+                    className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center"
+                    style={{
+                      background: `linear-gradient(135deg, ${getGradient(item.product.id).from}, ${getGradient(item.product.id).to})`,
+                    }}
+                  >
+                    <span className="text-2xl">{item.product.image}</span>
                   </div>
 
                   {/* Product Info */}
