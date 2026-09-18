@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { CartProvider, useCart } from './context/CartContext';
 import { products, categories, Product } from './data/products';
 import Header from './components/Header';
@@ -7,7 +7,11 @@ import ProductCard from './components/ProductCard';
 import ProductDetail from './components/ProductDetail';
 import Cart from './components/Cart';
 import Checkout from './components/Checkout';
+import Testimonials from './components/Testimonials';
+import Newsletter from './components/Newsletter';
 import Footer from './components/Footer';
+import Toast from './components/Toast';
+import ScrollToTop from './components/ScrollToTop';
 
 const AppContent: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -15,7 +19,8 @@ const AppContent: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
-  const [addedToCartId, setAddedToCartId] = useState<number | null>(null);
+  const [toastMessage, setToastMessage] = useState('');
+  const [isToastVisible, setIsToastVisible] = useState(false);
   const { addToCart } = useCart();
 
   const filteredProducts = useMemo(() => {
@@ -33,10 +38,14 @@ const AppContent: React.FC = () => {
     });
   }, [searchQuery, selectedCategory]);
 
+  const showToast = useCallback((message: string) => {
+    setToastMessage(message);
+    setIsToastVisible(true);
+  }, []);
+
   const handleAddToCart = (product: Product) => {
     addToCart(product);
-    setAddedToCartId(product.id);
-    setTimeout(() => setAddedToCartId(null), 1500);
+    showToast(`${product.name} sepete eklendi!`);
   };
 
   const handleCheckout = () => {
@@ -138,19 +147,12 @@ const AppContent: React.FC = () => {
         {filteredProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {filteredProducts.map((product) => (
-              <div key={product.id} className="relative">
-                <ProductCard
-                  product={product}
-                  onViewDetails={setSelectedProduct}
-                  onAddToCart={handleAddToCart}
-                />
-                {/* Added to cart notification */}
-                {addedToCartId === product.id && (
-                  <div className="absolute top-4 right-4 bg-green-500 text-white text-xs font-medium px-3 py-1.5 rounded-full animate-fade-in shadow-lg z-10">
-                    ✓ Sepete eklendi
-                  </div>
-                )}
-              </div>
+              <ProductCard
+                key={product.id}
+                product={product}
+                onViewDetails={setSelectedProduct}
+                onAddToCart={handleAddToCart}
+              />
             ))}
           </div>
         ) : (
@@ -211,6 +213,12 @@ const AppContent: React.FC = () => {
         </div>
       </section>
 
+      {/* Testimonials */}
+      <Testimonials />
+
+      {/* Newsletter */}
+      <Newsletter />
+
       <Footer />
 
       {/* Modals & Overlays */}
@@ -231,6 +239,16 @@ const AppContent: React.FC = () => {
         isOpen={isCheckoutOpen}
         onClose={() => setIsCheckoutOpen(false)}
       />
+
+      {/* Toast Notification */}
+      <Toast
+        message={toastMessage}
+        isVisible={isToastVisible}
+        onClose={() => setIsToastVisible(false)}
+      />
+
+      {/* Scroll to Top */}
+      <ScrollToTop />
     </div>
   );
 };

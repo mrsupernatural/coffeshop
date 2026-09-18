@@ -12,12 +12,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onViewDetails, onAdd
     <div className="product-card bg-white rounded-2xl overflow-hidden border border-[#E8D5B0]/50 animate-fade-in">
       {/* Image Area */}
       <div
-        className="relative h-48 sm:h-56 bg-gradient-to-br from-[#F5E6D3] to-[#E8D5B0] flex items-center justify-center cursor-pointer group"
+        className="relative h-48 sm:h-56 bg-gradient-to-br from-[#F5E6D3] to-[#E8D5B0] flex items-center justify-center cursor-pointer group overflow-hidden"
         onClick={() => onViewDetails(product)}
       >
-        <span className="text-6xl sm:text-7xl group-hover:scale-110 transition-transform duration-300">
-          {product.image}
-        </span>
+        <img
+          src={product.image}
+          alt={product.name}
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         <div className="absolute top-3 left-3">
           <span className="bg-white/90 backdrop-blur-sm text-[#5C3D2E] text-xs font-medium px-3 py-1 rounded-full">
             {product.category}

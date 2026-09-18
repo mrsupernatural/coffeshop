@@ -196,9 +196,10 @@ const Checkout: React.FC<CheckoutProps> = ({ isOpen, onClose }) => {
               <div className="bg-[#FDF8F3] rounded-xl p-4 mb-4">
                 <h4 className="font-semibold text-[#2C1810] text-sm mb-2">Sipariş Özeti</h4>
                 {cart.map((item) => (
-                  <div key={item.product.id} className="flex justify-between text-sm text-[#5C3D2E] py-1">
-                    <span>{item.product.name} x{item.quantity}</span>
-                    <span>₺{item.product.price * item.quantity}</span>
+                  <div key={item.product.id} className="flex items-center gap-2 text-sm text-[#5C3D2E] py-1">
+                    <img src={item.product.image} alt={item.product.name} className="w-8 h-8 rounded object-cover" />
+                    <span className="flex-1 truncate">{item.product.name} x{item.quantity}</span>
+                    <span className="font-medium">₺{item.product.price * item.quantity}</span>
                   </div>
                 ))}
                 <div className="border-t border-[#E8D5B0] mt-2 pt-2 flex justify-between font-bold text-[#2C1810]">

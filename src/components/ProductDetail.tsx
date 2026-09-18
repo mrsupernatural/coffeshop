@@ -36,8 +36,12 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose }) => {
         </button>
 
         {/* Image */}
-        <div className="h-56 sm:h-72 bg-gradient-to-br from-[#F5E6D3] to-[#E8D5B0] flex items-center justify-center rounded-t-2xl sm:rounded-t-3xl">
-          <span className="text-8xl sm:text-9xl">{product.image}</span>
+        <div className="h-56 sm:h-72 bg-gradient-to-br from-[#F5E6D3] to-[#E8D5B0] rounded-t-2xl sm:rounded-t-3xl overflow-hidden">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-full object-cover"
+          />
         </div>
 
         {/* Content */}

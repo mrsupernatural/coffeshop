@@ -60,8 +60,12 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, onCheckout }) => {
                   className="flex gap-4 bg-[#FDF8F3] rounded-xl p-3 animate-fade-in"
                 >
                   {/* Product Image */}
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#F5E6D3] to-[#E8D5B0] rounded-lg flex items-center justify-center flex-shrink-0">
-                    <span className="text-2xl">{item.product.image}</span>
+                  <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                    <img
+                      src={item.product.image}
+                      alt={item.product.name}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
 
                   {/* Product Info */}
