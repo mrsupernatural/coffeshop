@@ -12,6 +12,8 @@ export interface Product {
   rating: number;
   reviews: number;
   stock: number;
+  badge?: 'new' | 'popular' | 'sale';
+  originalPrice?: number;
 }
 
 export interface CartItem {
@@ -42,6 +44,7 @@ export const products: Product[] = [
     rating: 4.8,
     reviews: 124,
     stock: 15,
+    badge: 'popular',
   },
   {
     id: 2,
@@ -57,6 +60,8 @@ export const products: Product[] = [
     rating: 4.6,
     reviews: 98,
     stock: 23,
+    badge: 'sale',
+    originalPrice: 199,
   },
   {
     id: 3,
@@ -72,6 +77,7 @@ export const products: Product[] = [
     rating: 4.7,
     reviews: 156,
     stock: 42,
+    badge: 'new',
   },
   {
     id: 4,
@@ -87,6 +93,7 @@ export const products: Product[] = [
     rating: 4.9,
     reviews: 203,
     stock: 8,
+    badge: 'popular',
   },
   {
     id: 5,
@@ -102,6 +109,7 @@ export const products: Product[] = [
     rating: 4.5,
     reviews: 87,
     stock: 31,
+    badge: 'new',
   },
   {
     id: 6,
@@ -117,5 +125,7 @@ export const products: Product[] = [
     rating: 4.8,
     reviews: 142,
     stock: 3,
+    badge: 'sale',
+    originalPrice: 249,
   },
 ];

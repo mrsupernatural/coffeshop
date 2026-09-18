@@ -3,6 +3,8 @@ import { CartProvider, useCart } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
 import { CouponProvider } from './context/CouponContext';
 import { RecentlyViewedProvider, useRecentlyViewed } from './context/RecentlyViewedContext';
+import { CompareProvider, useCompare } from './context/CompareContext';
+import { ThemeProvider } from './context/ThemeContext';
 import { products, categories, Product } from './data/products';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -20,6 +22,8 @@ import ScrollToTop from './components/ScrollToTop';
 import SortFilter, { SortOption } from './components/SortFilter';
 import CookieBanner from './components/CookieBanner';
 import RecentlyViewed from './components/RecentlyViewed';
+import CompareModal from './components/CompareModal';
+import LiveChat from './components/LiveChat';
 
 const AppContent: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -30,7 +34,9 @@ const AppContent: React.FC = () => {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [isToastVisible, setIsToastVisible] = useState(false);
+  const [isCompareOpen, setIsCompareOpen] = useState(false);
   const { addToCart } = useCart();
+  const { compareCount } = useCompare();
 
   // Listen for custom event from ProductDetail related products
   useEffect(() => {
@@ -304,6 +310,28 @@ const AppContent: React.FC = () => {
       {/* Cookie Banner */}
       <CookieBanner />
 
+      {/* Compare Modal */}
+      <CompareModal
+        isOpen={isCompareOpen}
+        onClose={() => setIsCompareOpen(false)}
+      />
+
+      {/* Compare Floating Button */}
+      {compareCount > 0 && (
+        <button
+          onClick={() => setIsCompareOpen(true)}
+          className="fixed bottom-24 left-6 z-50 bg-[#5C3D2E] hover:bg-[#2C1810] text-white px-4 py-3 rounded-full shadow-lg flex items-center gap-2 transition-all duration-300 hover:shadow-xl cursor-pointer animate-fade-in"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          <span className="text-sm font-medium">Karşılaştır ({compareCount})</span>
+        </button>
+      )}
+
+      {/* Live Chat */}
+      <LiveChat />
+
       {/* Scroll to Top */}
       <ScrollToTop />
     </div>
@@ -312,15 +340,19 @@ const AppContent: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <CouponProvider>
-      <RecentlyViewedProvider>
-        <WishlistProvider>
-          <CartProvider>
-            <AppContent />
-          </CartProvider>
-        </WishlistProvider>
-      </RecentlyViewedProvider>
-    </CouponProvider>
+    <ThemeProvider>
+      <CouponProvider>
+        <CompareProvider>
+          <RecentlyViewedProvider>
+            <WishlistProvider>
+              <CartProvider>
+                <AppContent />
+              </CartProvider>
+            </WishlistProvider>
+          </RecentlyViewedProvider>
+        </CompareProvider>
+      </CouponProvider>
+    </ThemeProvider>
   );
 };
 
