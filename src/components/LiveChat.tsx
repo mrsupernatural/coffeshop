@@ -53,6 +53,11 @@ const LiveChat: React.FC = () => {
         }
       }
 
+      // Template uyarısı ekle
+      if (!Object.keys(botResponses).some(key => lowerInput.includes(key))) {
+        botResponse = 'Bu bir demo chat bot\'udur. Gerçek bir işletme değildir. Template projesi olarak kullanılmaktadır.';
+      }
+
       const botMessage: Message = {
         id: messages.length + 2,
         text: botResponse,
