@@ -11,6 +11,10 @@
   --color-gold-light: #E8D5B0;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: 'Inter', sans-serif;
   background-color: var(--color-cream-light);

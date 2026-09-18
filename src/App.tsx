@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { CartProvider, useCart } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
 import { CouponProvider } from './context/CouponContext';
@@ -17,6 +17,7 @@ import Footer from './components/Footer';
 import Toast from './components/Toast';
 import ScrollToTop from './components/ScrollToTop';
 import SortFilter, { SortOption } from './components/SortFilter';
+import CookieBanner from './components/CookieBanner';
 
 const AppContent: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -28,6 +29,16 @@ const AppContent: React.FC = () => {
   const [toastMessage, setToastMessage] = useState('');
   const [isToastVisible, setIsToastVisible] = useState(false);
   const { addToCart } = useCart();
+
+  // Listen for custom event from ProductDetail related products
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const customEvent = e as CustomEvent<Product>;
+      setSelectedProduct(customEvent.detail);
+    };
+    window.addEventListener('openProductDetail', handler);
+    return () => window.removeEventListener('openProductDetail', handler);
+  }, []);
 
   const filteredAndSortedProducts = useMemo(() => {
     let result = products.filter((product) => {
@@ -126,11 +137,13 @@ const AppContent: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-12 pr-4 py-3 rounded-xl border border-[#E8D5B0] bg-white text-[#2C1810] placeholder-[#8B5E3C]/60 focus:outline-none focus:ring-2 focus:ring-[#C8A96E] focus:border-transparent transition-all"
+              aria-label="Ürün ara"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8B5E3C] hover:text-[#2C1810] cursor-pointer"
+                aria-label="Aramayı temizle"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -277,6 +290,9 @@ const AppContent: React.FC = () => {
         isVisible={isToastVisible}
         onClose={() => setIsToastVisible(false)}
       />
+
+      {/* Cookie Banner */}
+      <CookieBanner />
 
       {/* Scroll to Top */}
       <ScrollToTop />

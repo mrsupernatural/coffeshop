@@ -1,5 +1,5 @@
-import React from 'react';
-import { Product } from '../data/products';
+import React, { useState } from 'react';
+import { Product, products } from '../data/products';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 
@@ -12,9 +12,17 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose }) => {
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const isFavorite = isInWishlist(product.id);
+  const [quantity, setQuantity] = useState(1);
+
+  // Get related products (same category, exclude current)
+  const relatedProducts = products
+    .filter((p) => p.category === product.category && p.id !== product.id)
+    .slice(0, 3);
 
   const handleAddToCart = () => {
-    addToCart(product);
+    for (let i = 0; i < quantity; i++) {
+      addToCart(product);
+    }
     onClose();
   };
 
@@ -40,6 +48,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose }) => {
         <button
           onClick={onClose}
           className="absolute top-4 right-4 z-10 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-[#5C3D2E] hover:bg-[#F5E6D3] transition-colors shadow-md cursor-pointer"
+          aria-label="Kapat"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -126,13 +135,42 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose }) => {
             </div>
           </div>
 
+          {/* Quantity Selector */}
+          <div className="mb-6">
+            <h4 className="text-sm font-medium text-[#8B5E3C] uppercase tracking-wider mb-2">
+              Miktar
+            </h4>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                className="w-10 h-10 rounded-xl border border-[#E8D5B0] flex items-center justify-center text-[#5C3D2E] hover:bg-[#F5E6D3] transition-colors cursor-pointer font-bold"
+                aria-label="Azalt"
+              >
+                −
+              </button>
+              <span className="w-12 text-center text-lg font-semibold text-[#2C1810]">
+                {quantity}
+              </span>
+              <button
+                onClick={() => setQuantity(quantity + 1)}
+                className="w-10 h-10 rounded-xl border border-[#E8D5B0] flex items-center justify-center text-[#5C3D2E] hover:bg-[#F5E6D3] transition-colors cursor-pointer font-bold"
+                aria-label="Artır"
+              >
+                +
+              </button>
+              <span className="ml-auto text-lg font-bold text-[#2C1810]">
+                ₺{product.price * quantity}
+              </span>
+            </div>
+          </div>
+
           {/* Action Buttons */}
-          <div className="flex gap-3">
+          <div className="flex gap-3 mb-8">
             <button
               onClick={handleAddToCart}
               className="flex-1 bg-[#5C3D2E] hover:bg-[#2C1810] text-white py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:shadow-xl cursor-pointer active:scale-[0.98]"
             >
-              Sepete Ekle — ₺{product.price}
+              Sepete Ekle
             </button>
             <button
               onClick={handleWishlistClick}
@@ -141,6 +179,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose }) => {
                   ? 'border-red-500 bg-red-50 text-red-500'
                   : 'border-[#E8D5B0] text-[#5C3D2E] hover:border-[#5C3D2E]'
               }`}
+              aria-label={isFavorite ? 'Favorilerden çıkar' : 'Favorilere ekle'}
             >
               <svg
                 className="w-6 h-6"
@@ -157,6 +196,44 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose }) => {
               </svg>
             </button>
           </div>
+
+          {/* Related Products */}
+          {relatedProducts.length > 0 && (
+            <div className="border-t border-[#E8D5B0] pt-6">
+              <h4 className="font-['Playfair_Display'] text-lg font-semibold text-[#2C1810] mb-4">
+                Benzer Ürünler
+              </h4>
+              <div className="grid grid-cols-3 gap-3">
+                {relatedProducts.map((related) => (
+                  <div
+                    key={related.id}
+                    className="bg-[#FDF8F3] rounded-xl p-3 cursor-pointer hover:shadow-md transition-shadow"
+                    onClick={() => {
+                      onClose();
+                      setTimeout(() => {
+                        const event = new CustomEvent('openProductDetail', { detail: related });
+                        window.dispatchEvent(event);
+                      }, 300);
+                    }}
+                  >
+                    <div className="aspect-square rounded-lg overflow-hidden mb-2">
+                      <img
+                        src={related.image}
+                        alt={related.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <p className="text-xs font-medium text-[#2C1810] truncate">
+                      {related.name}
+                    </p>
+                    <p className="text-xs text-[#C8A96E] font-bold mt-1">
+                      ₺{related.price}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
