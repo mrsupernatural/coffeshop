@@ -3,6 +3,19 @@ import { Product } from '../data/products';
 import { useWishlist } from '../context/WishlistContext';
 import { useCompare } from '../context/CompareContext';
 
+// Her ürün için özel gradient renkler
+const getGradient = (id: number) => {
+  const gradients: Record<number, { from: string; to: string }> = {
+    1: { from: '#F5E6D3', to: '#E8D5B0' }, // Ethiopian - krem
+    2: { from: '#E8D5B0', to: '#D4C4A8' }, // Colombian - altın
+    3: { from: '#FFE4B5', to: '#FFD700' }, // Morning - güneş
+    4: { from: '#4A3728', to: '#2C1810' }, // Espresso - koyu
+    5: { from: '#E6E6FA', to: '#D8BFD8' }, // Decaf - lavanta
+    6: { from: '#2C1810', to: '#1a0f0a' }, // Midnight - gece
+  };
+  return gradients[id] || { from: '#F5E6D3', to: '#E8D5B0' };
+};
+
 interface ProductCardProps {
   product: Product;
   onViewDetails: (product: Product) => void;
@@ -37,14 +50,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onViewDetails, onAdd
     <div className="product-card bg-white rounded-2xl overflow-hidden border border-[#E8D5B0]/50 animate-fade-in">
       {/* Image Area */}
       <div
-        className="relative h-48 sm:h-56 bg-gradient-to-br from-[#F5E6D3] to-[#E8D5B0] flex items-center justify-center cursor-pointer group overflow-hidden"
+        className="relative h-48 sm:h-56 flex items-center justify-center cursor-pointer group overflow-hidden"
         onClick={() => onViewDetails(product)}
+        style={{
+          background: `linear-gradient(135deg, ${getGradient(product.id).from}, ${getGradient(product.id).to})`,
+        }}
       >
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-        />
+        <span className="text-7xl sm:text-8xl group-hover:scale-110 transition-transform duration-500 drop-shadow-lg">
+          {product.image}
+        </span>
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         
         {/* Badges */}

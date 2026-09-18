@@ -2,6 +2,19 @@ import React from 'react';
 import { useCompare } from '../context/CompareContext';
 import { useCart } from '../context/CartContext';
 
+// Her ürün için özel gradient renkler
+const getGradient = (id: number) => {
+  const gradients: Record<number, { from: string; to: string }> = {
+    1: { from: '#F5E6D3', to: '#E8D5B0' },
+    2: { from: '#E8D5B0', to: '#D4C4A8' },
+    3: { from: '#FFE4B5', to: '#FFD700' },
+    4: { from: '#4A3728', to: '#2C1810' },
+    5: { from: '#E6E6FA', to: '#D8BFD8' },
+    6: { from: '#2C1810', to: '#1a0f0a' },
+  };
+  return gradients[id] || { from: '#F5E6D3', to: '#E8D5B0' };
+};
+
 interface CompareModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -84,11 +97,14 @@ const CompareModal: React.FC<CompareModalProps> = ({ isOpen, onClose }) => {
                           >
                             ×
                           </button>
-                          <img
-                            src={product.image}
-                            alt={product.name}
-                            className="w-full h-32 object-cover rounded-lg mb-2"
-                          />
+                          <div
+                            className="w-full h-32 rounded-lg mb-2 flex items-center justify-center"
+                            style={{
+                              background: `linear-gradient(135deg, ${getGradient(product.id).from}, ${getGradient(product.id).to})`,
+                            }}
+                          >
+                            <span className="text-4xl">{product.image}</span>
+                          </div>
                           <h4 className="font-semibold text-[#2C1810] text-sm">
                             {product.name}
                           </h4>

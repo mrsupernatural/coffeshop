@@ -6,6 +6,19 @@ import { useRecentlyViewed } from '../context/RecentlyViewedContext';
 import StockIndicator from './StockIndicator';
 import ShareButtons from './ShareButtons';
 
+// Her ürün için özel gradient renkler
+const getGradient = (id: number) => {
+  const gradients: Record<number, { from: string; to: string }> = {
+    1: { from: '#F5E6D3', to: '#E8D5B0' },
+    2: { from: '#E8D5B0', to: '#D4C4A8' },
+    3: { from: '#FFE4B5', to: '#FFD700' },
+    4: { from: '#4A3728', to: '#2C1810' },
+    5: { from: '#E6E6FA', to: '#D8BFD8' },
+    6: { from: '#2C1810', to: '#1a0f0a' },
+  };
+  return gradients[id] || { from: '#F5E6D3', to: '#E8D5B0' };
+};
+
 interface ProductDetailProps {
   product: Product;
   onClose: () => void;
@@ -66,12 +79,15 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose }) => {
         </button>
 
         {/* Image */}
-        <div className="h-56 sm:h-72 bg-gradient-to-br from-[#F5E6D3] to-[#E8D5B0] rounded-t-2xl sm:rounded-t-3xl overflow-hidden">
-          <img
-            src={product.image}
-            alt={product.name}
-            className="w-full h-full object-cover"
-          />
+        <div
+          className="h-56 sm:h-72 rounded-t-2xl sm:rounded-t-3xl overflow-hidden flex items-center justify-center"
+          style={{
+            background: `linear-gradient(135deg, ${getGradient(product.id).from}, ${getGradient(product.id).to})`,
+          }}
+        >
+          <span className="text-8xl sm:text-9xl drop-shadow-lg">
+            {product.image}
+          </span>
         </div>
 
         {/* Content */}
