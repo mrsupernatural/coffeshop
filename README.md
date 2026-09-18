@@ -278,20 +278,13 @@ Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICE
 
 ## 📸 Ekran Görüntüleri
 
-### Ana Sayfa
-![Ana Sayfa](https://via.placeholder.com/800x400?text=Ana+Sayfa)
-
-### Ürün Detay
-![Ürün Detay](https://via.placeholder.com/800x400?text=Ürün+Detay)
-
-### Sepet
-![Sepet](https://via.placeholder.com/800x400?text=Sepet)
-
-### Karşılaştırma
-![Karşılaştırma](https://via.placeholder.com/800x400?text=Karşılaştırma)
-
-### Dark Mode
-![Dark Mode](https://via.placeholder.com/800x400?text=Dark+Mode)
+> Ekran görüntüleri için projeyi yerel olarak çalıştırın ve tarayıcınızdan ekran görüntüsü alın.
+> 
+> ```bash
+> npm run dev
+> ```
+> 
+> Ardından tarayıcınızda `http://localhost:5173` adresine gidin.
 
 ---
 
