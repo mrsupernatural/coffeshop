@@ -278,7 +278,29 @@ Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICE
 
 ## 📸 Ekran Görüntüleri
 
-> Ekran görüntüleri için projeyi yerel olarak çalıştırın ve tarayıcınızdan ekran görüntüsü alın.
+### Ürün Görselleri
+
+#### Ethiopian Yirgacheffe
+![Ethiopian Yirgacheffe](https://image.qwenlm.ai/generated-images/d32f7f1a-f36b-46fd-bd62-4cb4cd8cfa6c/_result.png)
+
+#### Colombian Supremo
+![Colombian Supremo](https://image.qwenlm.ai/generated-images/54b6d24e-1131-4189-a189-62d2bc17602f/_result.png)
+
+#### Artisan Morning Blend
+![Artisan Morning Blend](https://image.qwenlm.ai/generated-images/c71d6a7e-0f2d-45a8-bff2-cf4bb8d3cd5b/_result.png)
+
+#### Italian Espresso Roast
+![Italian Espresso Roast](https://image.qwenlm.ai/generated-images/454e1016-d90e-45d9-9523-db0643d27617/_result.png)
+
+#### Swiss Water Decaf
+![Swiss Water Decaf](https://image.qwenlm.ai/generated-images/481f88d1-eac3-4250-828e-245f93bd89e7/_result.png)
+
+#### Midnight Velvet Blend
+![Midnight Velvet Blend](https://image.qwenlm.ai/generated-images/a105c15d-fe23-4fe1-81e8-2accfa5b0fe5/_result.png)
+
+### Uygulama Özellikleri
+
+> Tüm özellikleri görmek için projeyi yerel olarak çalıştırın:
 > 
 > ```bash
 > npm run dev
